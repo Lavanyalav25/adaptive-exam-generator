@@ -1,0 +1,85 @@
+<div class="dashboard-container">
+  <div class="header">
+    <h1 class="gradient-text">Welcome back, {{ (authService.user$ | async)?.name }}</h1>
+    <p class="text-muted">Explore your courses and track your progress</p>
+  </div>
+
+  <div class="grid">
+    <!-- Performance Chart -->
+    <mat-card class="glass-morphism chart-card" *ngIf="attempts.length > 0">
+      <mat-card-header>
+        <mat-card-title>Learning Progress Over Time</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <app-performance-chart [data]="chartData" type="line"></app-performance-chart>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Recent Attempts List -->
+    <mat-card class="glass-morphism" *ngIf="attempts.length > 0" style="margin-top: 1rem;">
+      <mat-card-header>
+        <mat-card-title>Recent Quiz Scores</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="attempts-list">
+          <div *ngFor="let attempt of attempts" class="attempt-item">
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <span style="font-weight: 500;">{{ attempt.Quiz?.title || 'General Quiz' }}</span>
+              <span [style.color]="attempt.score >= 50 ? '#10b981' : '#ef4444'" style="font-weight: 700;">
+                {{ attempt.score }}%
+              </span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Simple Progress Overview if no attempts -->
+    <mat-card class="glass-morphism" *ngIf="attempts.length === 0">
+        <mat-card-header>
+            <mat-icon color="primary">insights</mat-icon>
+            <mat-card-title>Ready to start?</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <p>You haven't attempted any quizzes yet. Enroll in a course and begin your journey!</p>
+        </mat-card-content>
+    </mat-card>
+
+    <!-- Course List -->
+    <div class="grid" style="grid-column: span 3; margin-top: 2rem;">
+      <mat-card *ngFor="let course of courses" class="glass-morphism course-card">
+        <mat-card-header>
+          <div mat-card-avatar class="course-avatar">
+            <mat-icon>school</mat-icon>
+          </div>
+          <mat-card-title>{{ course.title }}</mat-card-title>
+          <mat-card-subtitle>{{ course.difficulty_level }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Learn advanced concepts in {{ course.title }}. Master your skills!</p>
+          <mat-progress-bar mode="determinate" [value]="50" style="margin: 1rem 0;"></mat-progress-bar>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="text-muted">Status: Active</span>
+            <button mat-flat-button class="premium-button" (click)="startQuiz(course.id)">Start Quiz</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<style>
+.course-avatar {
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-muted { color: var(--text-muted); font-size: 0.875rem; }
+
+::ng-deep .mat-mdc-card-title { color: var(--text-main) !important; font-weight: 700 !important; }
+::ng-deep .mat-mdc-card-subtitle { color: var(--text-muted) !important; }
+</style>

@@ -1,0 +1,39 @@
+<div class="dashboard-container">
+  <div class="header" style="margin-bottom: 2rem;">
+    <h1 class="gradient-text">System Administration</h1>
+    <p class="text-muted">Global analytics and user management</p>
+  </div>
+
+  <div class="grid">
+    <mat-card *ngFor="let stat of stats" class="glass-morphism stat-card">
+        <mat-icon [style.color]="stat.color">{{ stat.icon }}</mat-icon>
+        <div class="stat-value">{{ stat.value }}</div>
+        <div class="text-muted">{{ stat.label }}</div>
+    </mat-card>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+    <mat-card class="glass-morphism">
+      <mat-card-header>
+        <mat-card-title>Recent Enrolment Activity</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <app-performance-chart [data]="[{label: 'Jan', value: 400}, {label: 'Feb', value: 600}, {label: 'Mar', value: 800}]" type="bar"></app-performance-chart>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="glass-morphism">
+      <mat-card-header>
+        <mat-card-title>Course Distribution</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <app-performance-chart [data]="pieData" type="pie"></app-performance-chart>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<style>
+::ng-deep .mat-mdc-card-title { color: white !important; font-weight: 700 !important; }
+.stat-card mat-icon { font-size: 2rem; width: 2rem; height: 2rem; }
+</style>

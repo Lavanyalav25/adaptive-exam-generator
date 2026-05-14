@@ -1,0 +1,156 @@
+<div class="dashboard-container">
+  <div class="header">
+    <h1 class="gradient-text">Instructor Dashboard</h1>
+    <p class="text-muted">Manage your courses and empower your students with AI</p>
+  </div>
+
+  <div class="grid">
+    <!-- Course Creation Form -->
+    <mat-card class="glass-morphism course-form">
+      <mat-card-header>
+        <mat-card-title>Create New Course</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="courseForm" (ngSubmit)="onCreateCourse()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Course Title</mat-label>
+            <input matInput formControlName="title" placeholder="e.g. Master Classical Physics">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Difficulty</mat-label>
+            <mat-select formControlName="difficulty_level">
+              <mat-option value="BEGINNER">Beginner</mat-option>
+              <mat-option value="INTERMEDIATE">Intermediate</mat-option>
+              <mat-option value="ADVANCED">Advanced</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-flat-button class="premium-button full-width" type="submit" [disabled]="courseForm.invalid">
+            <mat-icon>add</mat-icon> Create Course
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- My Courses List -->
+    <div style="grid-column: span 1;">
+      <h2>My Active Courses</h2>
+      <mat-card *ngFor="let course of courses" class="glass-morphism" style="margin-bottom: 1rem;">
+        <mat-card-header>
+          <mat-card-title>{{ course.title }}</mat-card-title>
+          <mat-card-subtitle>{{ course.difficulty_level }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+            <button mat-stroked-button color="primary" (click)="viewInsights(course)">View Results</button>
+            <button mat-flat-button class="ai-gen-btn" (click)="generateAiQuiz(course)">
+                <mat-icon>auto_awesome</mat-icon> AI Quiz
+            </button>
+            <button mat-flat-button class="premium-button" (click)="openManualQuizForm(course)">
+                <mat-icon>edit</mat-icon> Manual Quiz
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Manual Quiz Builder Form -->
+      <div *ngIf="showManualForm" class="manual-builder glass-morphism">
+        <div class="header-row">
+          <h2 class="gradient-text">Manual Quiz Builder</h2>
+          <button mat-icon-button (click)="showManualForm = false"><mat-icon>close</mat-icon></button>
+        </div>
+
+        <form [formGroup]="manualQuizForm" (ngSubmit)="saveManualQuiz()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Quiz Title</mat-label>
+            <input matInput formControlName="quizTitle">
+          </mat-form-field>
+
+          <div formArrayName="questions">
+            <div *ngFor="let q of questions.controls; let i=index" [formGroupName]="i" class="question-box glass-morphism mb-3">
+              <div class="header-row">
+                <h3 style="color: white;">Question {{ i + 1 }}</h3>
+                <button type="button" mat-icon-button color="warn" (click)="removeQuestion(i)" *ngIf="questions.length > 1">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Question Text</mat-label>
+                <input matInput formControlName="question_text">
+              </mat-form-field>
+
+              <div formArrayName="options" class="options-grid">
+                <mat-form-field appearance="outline" *ngFor="let opt of [0,1,2,3]">
+                  <mat-label>Option {{ opt + 1 }}</mat-label>
+                  <input matInput [formControlName]="opt">
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Correct Answer (Exact text from options)</mat-label>
+                <input matInput formControlName="correct_answer">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="actions-row">
+            <button type="button" mat-stroked-button color="accent" (click)="addQuestion()" [disabled]="questions.length >= 10">
+              <mat-icon>add</mat-icon> Add Question ({{ questions.length }}/10)
+            </button>
+            <button type="submit" mat-flat-button class="premium-button" [disabled]="manualQuizForm.invalid">
+              Save Manual Quiz
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Student Results Section -->
+    <div *ngIf="showInsights" class="manual-builder glass-morphism">
+        <div class="header-row">
+            <h2 class="gradient-text">Student Performance: {{ selectedCourse?.title }}</h2>
+            <button mat-icon-button (click)="showInsights = false"><mat-icon>close</mat-icon></button>
+        </div>
+        
+        <table style="width: 100%; color: white; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                    <th style="padding: 1rem;">Student Name</th>
+                    <th style="padding: 1rem;">Quiz</th>
+                    <th style="padding: 1rem;">Score</th>
+                    <th style="padding: 1rem;">Feedback</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let insight of insights" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 1rem;">{{ insight.student?.name }}</td>
+                    <td style="padding: 1rem;">{{ insight.Quiz?.title }}</td>
+                    <td style="padding: 1rem; font-weight: 700;" [style.color]="insight.score >= 50 ? '#10b981' : '#ef4444'">
+                        {{ insight.score }}%
+                    </td>
+                    <td style="padding: 1rem;">{{ insight.emotional_feedback || 'N/A' }}</td>
+                </tr>
+                <tr *ngIf="insights.length === 0">
+                    <td colspan="4" style="padding: 2rem; text-align: center; color: var(--text-muted);">No student attempts found for this course yet.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+
+<style>
+.full-width { width: 100%; margin-bottom: 1rem; }
+::ng-deep .mat-mdc-card-title { color: white !important; font-weight: 700 !important; }
+::ng-deep .mat-mdc-card-subtitle { color: var(--text-muted) !important; }
+h2 { color: var(--text-main); margin-bottom: 1.5rem; }
+
+.manual-builder { margin-top: 2rem; padding: 2rem; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); grid-column: 1 / -1; }
+.header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.question-box { padding: 1.5rem; border-radius: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 1.5rem; }
+.options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.actions-row { display: flex; justify-content: space-between; margin-top: 2rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+</style>

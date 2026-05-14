@@ -1,0 +1,107 @@
+<div class="auth-container">
+  <div class="auth-card glass-morphism">
+    <div class="header">
+      <h1 class="gradient-text">SkillForge</h1>
+      <p>Ignite Your Potential</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email Address</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="you@example.com">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" placeholder="••••••••">
+      </mat-form-field>
+
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <button mat-flat-button class="premium-button full-width" type="submit" [disabled]="loginForm.invalid">
+        Sign In
+      </button>
+
+      <div class="footer">
+        Don't have an account? <a routerLink="/auth/register">Sign Up</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top right, #1e1b4b 0%, #0f172a 100%);
+}
+
+.auth-card {
+  padding: 3rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+}
+
+.header p {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.footer {
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.footer a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+::ng-deep .mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: var(--primary) !important;
+}
+
+::ng-deep .mat-mdc-form-field-label {
+  color: var(--text-muted) !important;
+}
+
+::ng-deep input.mat-mdc-input-element {
+  color: white !important;
+}
+</style>

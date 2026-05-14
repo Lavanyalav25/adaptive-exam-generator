@@ -1,0 +1,74 @@
+<div class="quiz-container">
+  <!-- Progress Header -->
+  <div *ngIf="!isFinished" class="header">
+    <div class="timer">
+      <mat-icon>timer</mat-icon> {{ timeLeft | number:'2.0-0' }}s
+    </div>
+    <mat-progress-bar mode="determinate" [value]="(currentIndex + 1) / questions.length * 100" class="progress"></mat-progress-bar>
+    <p class="text-muted">Question {{ currentIndex + 1 }} of {{ questions.length }}</p>
+  </div>
+
+  <!-- Question Card -->
+  <mat-card *ngIf="!isFinished && questions.length > 0" class="glass-morphism">
+    <mat-card-content>
+      <div class="question-text">
+        {{ questions[currentIndex].question_text }}
+      </div>
+
+      <mat-radio-group [(ngModel)]="selectedAnswers[currentIndex]" class="options-group">
+        <div *ngFor="let option of questions[currentIndex].options" class="option-container">
+          <mat-radio-button [value]="option" class="full-width-radio">
+            <span class="option-text">{{ option }}</span>
+          </mat-radio-button>
+        </div>
+      </mat-radio-group>
+    </mat-card-content>
+    
+    <mat-card-actions class="footer">
+      <button mat-button (click)="prevQuestion()" [disabled]="currentIndex === 0">Previous</button>
+      <button mat-flat-button class="premium-button" (click)="nextQuestion()" *ngIf="currentIndex < questions.length - 1">Next</button>
+      <button mat-flat-button class="premium-button" (click)="submitQuiz()" *ngIf="currentIndex === questions.length - 1">Submit Quiz</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Result Screen -->
+  <mat-card *ngIf="isFinished" class="glass-morphism result-card">
+    <mat-card-header>
+      <mat-card-title class="gradient-text">Quiz Completed!</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="score-display">
+        <h1>Your Score: {{ score }}%</h1>
+        <p class="text-muted" style="font-size: 1.2rem; font-weight: 600; color: #10b981;">{{ recommendation }}</p>
+      </div>
+
+      <div class="emotional-feedback" *ngIf="!emotionalFeedback">
+        <p>How did you feel about this quiz?</p>
+        <div class="moods">
+          <button mat-icon-button (click)="emotionalFeedback = 'HAPPY'" [color]="emotionalFeedback === 'HAPPY' ? 'primary' : ''"><mat-icon>sentiment_very_satisfied</mat-icon></button>
+          <button mat-icon-button (click)="emotionalFeedback = 'NEUTRAL'" [color]="emotionalFeedback === 'NEUTRAL' ? 'primary' : ''"><mat-icon>sentiment_neutral</mat-icon></button>
+          <button mat-icon-button (click)="emotionalFeedback = 'STRESSED'" [color]="emotionalFeedback === 'STRESSED' ? 'primary' : ''"><mat-icon>sentiment_very_dissatisfied</mat-icon></button>
+        </div>
+      </div>
+
+      <button mat-flat-button class="premium-button full-width" (click)="finish()" style="margin-top: 2rem;">Back to Dashboard</button>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<style>
+.progress { margin-bottom: 2rem; border-radius: 4px; height: 8px; }
+.options-group { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2rem; }
+.option-container { background: rgba(255, 255, 255, 0.07); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s; cursor: pointer; display: flex; align-items: center; }
+.option-container:hover { background: rgba(255, 255, 255, 0.12); border-color: #3b82f6; }
+.full-width-radio { width: 100%; padding: 1rem; }
+.option-text { font-size: 1.1rem; color: #e2e8f0; white-space: normal; line-height: 1.4; }
+
+.score-display { text-align: center; margin: 3rem 0; }
+.score-display h1 { font-size: 4rem; font-weight: 900; }
+
+.moods { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; }
+.moods mat-icon { font-size: 2.5rem; width: 2.5rem; height: 2.5rem; }
+
+::ng-deep .mat-mdc-radio-button .mdc-form-field { color: white !important; }
+</style>
