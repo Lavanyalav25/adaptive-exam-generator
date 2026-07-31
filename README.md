@@ -65,11 +65,9 @@ Before you begin, ensure you have the following installed:
 
 4. **Database Setup**
    Ensure your MySQL server is running and create the database named in your `.env` file (`skillforge_db`). The tables will be automatically synchronized when the backend starts.
-
 ## 🚀 Running the Application
 
 You can start both the frontend and backend simultaneously using the provided batch file or npm script:
-
 ### Windows (Quick Start)
 Double-click the `run_project.bat` file in the root directory.
 
@@ -78,7 +76,6 @@ Run the following command in the root directory:
 ```bash
 npm start
 ```
-
 - **Frontend**: [http://localhost:4200](http://localhost:4200)
 - **Backend API**: [http://localhost:5000](http://localhost:5000)
 
