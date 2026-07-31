@@ -5,7 +5,6 @@
 SkillForge AI is a cutting-edge, AI-powered e-learning platform designed to revolutionize the way instructors create content and students learn. By leveraging the power of OpenAI, SkillForge AI automates the generation of high-quality quizzes, providing an adaptive and engaging learning experience.
 
 ## 🚀 Features
-
 - **AI-Powered Quiz Generation**: Automatically create comprehensive quizzes from course content using OpenAI's GPT models.
 - **Dynamic Instructor Dashboard**: Manage courses, track student performance, and generate AI-driven assessments with ease.
 - **Intuitive Student Portal**: Track learning progress through visual charts and engage with interactive course materials.
@@ -36,9 +35,7 @@ Before you begin, ensure you have the following installed:
 - [Node.js](https://nodejs.org/) (v18 or higher)
 - [MySQL](https://www.mysql.com/)
 - [Angular CLI](https://angular.io/cli) (optional, for global ng commands)
-
 ## ⚙️ Installation & Setup
-
 1. **Clone the Repository**
    ```bash
    git clone <repository-url>
@@ -66,7 +63,6 @@ Before you begin, ensure you have the following installed:
 4. **Database Setup**
    Ensure your MySQL server is running and create the database named in your `.env` file (`skillforge_db`). The tables will be automatically synchronized when the backend starts.
 ## 🚀 Running the Application
-
 You can start both the frontend and backend simultaneously using the provided batch file or npm script:
 ### Windows (Quick Start)
 Double-click the `run_project.bat` file in the root directory.
