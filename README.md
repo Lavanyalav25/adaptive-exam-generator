@@ -20,7 +20,7 @@ SkillForge AI is a cutting-edge, AI-powered e-learning platform designed to revo
 - **Icons**: Lucide Angular
 - **Charts**: Chart.js
 - **Editor**: Quill
-
+- 
 ### Backend
 - **Runtime**: Node.js
 - **Framework**: Express.js
@@ -72,6 +72,7 @@ Run the following command in the root directory:
 ```bash
 npm start
 ```
+
 - **Frontend**: [http://localhost:4200](http://localhost:4200)
 - **Backend API**: [http://localhost:5000](http://localhost:5000)
 
